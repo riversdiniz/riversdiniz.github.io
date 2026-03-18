@@ -1,182 +1,978 @@
 <!DOCTYPE html>
-<html lang="pt-br">
-
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="assets/icons/codificacao-css.png" type="image/x-icon">
-    <link rel="stylesheet" href="style.css">
-    <title>Portifólio | River Diniz</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rivers Diniz — Engenheiro de Dados</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:        #080b10;
+    --bg2:       #0d1117;
+    --bg3:       #111820;
+    --surface:   #141c27;
+    --border:    rgba(255,255,255,0.06);
+    --border-hi: rgba(96,210,180,0.25);
+    --text:      #c9d5e0;
+    --text-dim:  #5a7080;
+    --head:      #e8f2f8;
+    --accent:    #60d2b4;
+    --accent2:   #3ba8c5;
+    --accent-glow: rgba(96,210,180,0.15);
+    --font-head: 'Syne', sans-serif;
+    --font-body: 'DM Sans', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; font-size: 16px; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-weight: 300;
+    line-height: 1.7;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── NOISE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+    opacity: 0.022;
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 clamp(1.5rem, 5vw, 4rem);
+    height: 64px;
+    background: rgba(8,11,16,0.7);
+    backdrop-filter: blur(18px) saturate(1.4);
+    border-bottom: 1px solid var(--border);
+    transition: background 0.3s;
+  }
+  nav.scrolled { background: rgba(8,11,16,0.92); }
+
+  .nav-logo {
+    font-family: var(--font-head);
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: var(--head);
+    letter-spacing: -0.01em;
+  }
+  .nav-logo span { color: var(--accent); }
+
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+  .nav-links a {
+    font-size: 0.83rem;
+    font-weight: 400;
+    color: var(--text-dim);
+    text-decoration: none;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--accent); }
+
+  .nav-cta {
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--accent);
+    text-decoration: none;
+    border: 1px solid rgba(96,210,180,0.35);
+    padding: 0.4rem 1.1rem;
+    border-radius: 4px;
+    transition: background 0.2s, color 0.2s;
+  }
+  .nav-cta:hover { background: var(--accent); color: var(--bg); }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 120px clamp(1.5rem, 8vw, 7rem) 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Decorative grid lines */
+  #hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(96,210,180,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(96,210,180,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 80% 70% at 60% 50%, black 20%, transparent 80%);
+    pointer-events: none;
+  }
+
+  /* Glowing orb */
+  #hero::after {
+    content: '';
+    position: absolute;
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(96,210,180,0.08) 0%, transparent 70%);
+    top: 50%; right: 0;
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+
+  .hero-inner {
+    max-width: 780px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.78rem;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.6rem;
+  }
+  .hero-label::before {
+    content: '';
+    display: inline-block;
+    width: 28px; height: 1px;
+    background: var(--accent);
+    opacity: 0.6;
+  }
+
+  .hero-name {
+    font-family: var(--font-head);
+    font-size: clamp(3rem, 7vw, 5.5rem);
+    font-weight: 800;
+    color: var(--head);
+    line-height: 1.0;
+    letter-spacing: -0.03em;
+    margin-bottom: 0.5rem;
+  }
+  .hero-name .accent-word { color: var(--accent); }
+
+  .hero-title {
+    font-family: var(--font-head);
+    font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+    font-weight: 500;
+    color: var(--text-dim);
+    margin-bottom: 1.8rem;
+    letter-spacing: -0.01em;
+  }
+
+  .hero-bio {
+    font-size: 1.05rem;
+    color: var(--text);
+    max-width: 560px;
+    line-height: 1.8;
+    margin-bottom: 2.8rem;
+    font-weight: 300;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-body);
+    font-size: 0.88rem;
+    font-weight: 500;
+    text-decoration: none;
+    padding: 0.75rem 1.6rem;
+    border-radius: 6px;
+    transition: all 0.22s ease;
+    letter-spacing: 0.01em;
+    cursor: pointer;
+    border: none;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: var(--bg);
+  }
+  .btn-primary:hover {
+    background: #7ae0c4;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(96,210,180,0.25);
+  }
+  .btn-ghost {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+  .btn-ghost:hover {
+    border-color: rgba(96,210,180,0.4);
+    color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  .hero-scroll-hint {
+    position: absolute;
+    bottom: 2.5rem;
+    left: clamp(1.5rem, 8vw, 7rem);
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .scroll-line {
+    width: 40px; height: 1px;
+    background: var(--text-dim);
+    animation: scrollPulse 2s ease-in-out infinite;
+  }
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 0.3; width: 40px; }
+    50% { opacity: 0.9; width: 60px; }
+  }
+
+  /* ── SECTIONS ── */
+  section {
+    padding: clamp(4rem, 8vw, 7rem) clamp(1.5rem, 8vw, 7rem);
+  }
+
+  .section-header {
+    margin-bottom: clamp(2.5rem, 5vw, 4rem);
+  }
+  .section-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 400;
+    margin-bottom: 0.8rem;
+  }
+  .section-tag::before {
+    content: '';
+    width: 20px; height: 1px;
+    background: var(--accent);
+    opacity: 0.5;
+  }
+  .section-title {
+    font-family: var(--font-head);
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 700;
+    color: var(--head);
+    letter-spacing: -0.025em;
+    line-height: 1.1;
+  }
+
+  /* ── ABOUT ── */
+  #about { background: var(--bg2); }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+
+  .about-text p {
+    font-size: 1rem;
+    line-height: 1.85;
+    color: var(--text);
+    margin-bottom: 1.2rem;
+  }
+  .about-text p:last-child { margin-bottom: 0; }
+
+  .about-skills {}
+
+  .skills-group { margin-bottom: 2rem; }
+  .skills-group-label {
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 0.9rem;
+    font-weight: 400;
+  }
+  .skills-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .tag {
+    font-size: 0.78rem;
+    font-weight: 400;
+    padding: 0.35rem 0.85rem;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+    transition: border-color 0.2s, color 0.2s;
+    letter-spacing: 0.01em;
+  }
+  .tag:hover { border-color: var(--border-hi); color: var(--accent); }
+  .tag.accent-tag {
+    border-color: rgba(96,210,180,0.2);
+    background: rgba(96,210,180,0.05);
+    color: var(--accent);
+  }
+
+  /* ── PROJECTS ── */
+  #projects { background: var(--bg); }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .project-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.8rem;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    display: flex;
+    flex-direction: column;
+  }
+  .project-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--lang-color, var(--accent)), transparent);
+    opacity: 0.8;
+  }
+  .project-card:hover {
+    transform: translateY(-6px);
+    border-color: var(--border-hi);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(96,210,180,0.08);
+  }
+  .project-card:hover .project-glow {
+    opacity: 1;
+  }
+
+  .project-glow {
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 160px; height: 160px;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--lang-color, var(--accent)), transparent 70%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+  }
+
+  .project-lang-icon {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    background: var(--lang-bg, rgba(96,210,180,0.1));
+    color: var(--lang-color, var(--accent));
+    margin-bottom: 1.2rem;
+    font-family: var(--font-head);
+  }
+
+  .project-name {
+    font-family: var(--font-head);
+    font-size: 1.12rem;
+    font-weight: 700;
+    color: var(--head);
+    margin-bottom: 0.6rem;
+    letter-spacing: -0.01em;
+  }
+
+  .project-desc {
+    font-size: 0.88rem;
+    line-height: 1.7;
+    color: var(--text-dim);
+    flex: 1;
+    margin-bottom: 1.4rem;
+  }
+
+  .project-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 1.4rem;
+  }
+  .stack-tag {
+    font-size: 0.72rem;
+    padding: 0.22rem 0.6rem;
+    border-radius: 3px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    font-weight: 400;
+    letter-spacing: 0.02em;
+  }
+
+  .project-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--accent);
+    text-decoration: none;
+    transition: gap 0.2s;
+  }
+  .project-link:hover { gap: 0.7rem; }
+
+  /* ── EXPERIENCE ── */
+  #experience { background: var(--bg2); }
+
+  .timeline {
+    position: relative;
+    padding-left: 2rem;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 8px;
+    width: 1px;
+    bottom: 0;
+    background: linear-gradient(to bottom, var(--accent), transparent);
+    opacity: 0.3;
+  }
+
+  .timeline-item {
+    position: relative;
+    padding-bottom: 3rem;
+  }
+  .timeline-item:last-child { padding-bottom: 0; }
+
+  .timeline-dot {
+    position: absolute;
+    left: -2rem;
+    top: 8px;
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    background: var(--accent);
+    transform: translateX(-4px);
+    box-shadow: 0 0 0 3px rgba(96,210,180,0.15);
+  }
+
+  .timeline-meta {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.3rem;
+  }
+  .timeline-role {
+    font-family: var(--font-head);
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--head);
+    letter-spacing: -0.01em;
+  }
+  .timeline-company {
+    font-size: 0.85rem;
+    color: var(--accent);
+    font-weight: 400;
+  }
+  .timeline-period {
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    letter-spacing: 0.04em;
+    margin-left: auto;
+  }
+  .timeline-desc {
+    font-size: 0.92rem;
+    color: var(--text);
+    line-height: 1.8;
+    margin-top: 0.6rem;
+  }
+  .timeline-desc ul {
+    padding-left: 1.2rem;
+    margin-top: 0.5rem;
+  }
+  .timeline-desc li {
+    margin-bottom: 0.3rem;
+    font-size: 0.9rem;
+    color: var(--text-dim);
+  }
+
+  /* ── CONTACT ── */
+  #contact { background: var(--bg3); }
+
+  .contact-inner {
+    max-width: 640px;
+  }
+
+  .contact-tagline {
+    font-family: var(--font-head);
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    font-weight: 700;
+    color: var(--head);
+    letter-spacing: -0.025em;
+    line-height: 1.15;
+    margin-bottom: 1.2rem;
+  }
+  .contact-tagline span { color: var(--accent); }
+
+  .contact-text {
+    font-size: 0.98rem;
+    color: var(--text-dim);
+    margin-bottom: 2.5rem;
+    line-height: 1.8;
+  }
+
+  .contact-links {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 2rem clamp(1.5rem, 8vw, 7rem);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    background: var(--bg);
+  }
+  .footer-logo {
+    font-family: var(--font-head);
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text-dim);
+  }
+  .footer-logo span { color: var(--accent); }
+  .footer-copy {
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    opacity: 0.6;
+  }
+  .footer-socials {
+    display: flex;
+    gap: 1.2rem;
+  }
+  .footer-socials a {
+    color: var(--text-dim);
+    text-decoration: none;
+    font-size: 0.8rem;
+    transition: color 0.2s;
+  }
+  .footer-socials a:hover { color: var(--accent); }
+
+  /* ── ANIMATIONS ── */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.65s ease, transform 0.65s ease;
+  }
+  .fade-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .fade-up.delay-1 { transition-delay: 0.1s; }
+  .fade-up.delay-2 { transition-delay: 0.2s; }
+  .fade-up.delay-3 { transition-delay: 0.3s; }
+  .fade-up.delay-4 { transition-delay: 0.4s; }
+
+  /* ── SVG ICONS ── */
+  .icon { display: inline-block; vertical-align: middle; }
+
+  /* ── DIVIDER ── */
+  .section-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+    margin: 0 clamp(1.5rem, 8vw, 7rem);
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+    .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    .timeline-period { margin-left: 0; }
+    .timeline-meta { flex-direction: column; gap: 0.2rem; }
+  }
+</style>
 </head>
-<!-- #008FFF -->
-
 <body>
-    <header>
-        <nav>
-            <h2><a class="logo" href="#">&ltRiver Diniz/&gt</a></h2>
 
-            <ul class="nav-list">
-                <li class="item-nav"><a class="nav-link" href="#sobre-mim">Sobre mim</a></li>
-                <!-- <li class="item-nav"><a class="nav-link" href="#projetos">Projetos</a></li>
-                <li class="item-nav"><a class="nav-link" href="#conhecimentos">Conhecimentos</a></li> -->
-                <li class="item-nav"><a class="nav-link" href="#contatos">Contatos</a></li>
-            </ul>
+<!-- NAV -->
+<nav id="navbar">
+  <div class="nav-logo">R<span>.</span>Diniz</div>
+  <ul class="nav-links">
+    <li><a href="#about">Sobre</a></li>
+    <li><a href="#projects">Projetos</a></li>
+    <li><a href="#experience">Experiência</a></li>
+    <li><a href="#contact">Contato</a></li>
+  </ul>
+  <a href="https://www.linkedin.com/in/riversdiniz" target="_blank" rel="noopener" class="nav-cta">LinkedIn</a>
+</nav>
 
-            <div class="menu-icon">
-                <div id="line-one" class="line-1"></div>
-                <div id="line-two" class="line-2"></div>
-                <div id="line-three" class="line-3"></div>
-            </div>
-            
-        </nav>
-    </header>
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-inner">
+    <div class="hero-label">Disponível para oportunidades</div>
+    <h1 class="hero-name">Rivers<br><span class="accent-word">Diniz</span></h1>
+    <p class="hero-title">
+      <!-- [SUBSTITUA] Ex: Engenheiro de Dados · Cientista de Dados -->
+      Engenheiro de Dados · Desenvolvedor Backend
+    </p>
+    <p class="hero-bio">
+      <!-- [SUBSTITUA com seu resumo do LinkedIn — 2 a 3 linhas] -->
+      Profissional com experiência em engenharia de dados, construção de pipelines robustos e transformação de dados brutos em insights acionáveis. Apaixonado por arquiteturas escaláveis e soluções orientadas a dados.
+    </p>
+    <div class="hero-actions">
+      <a href="#projects" class="btn btn-primary">
+        Ver Projetos
+        <svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <a href="https://www.linkedin.com/in/riversdiniz" target="_blank" rel="noopener" class="btn btn-ghost">
+        <svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+        LinkedIn
+      </a>
+      <a href="https://github.com/riversdiniz" target="_blank" rel="noopener" class="btn btn-ghost">
+        <svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg>
+        GitHub
+      </a>
+    </div>
+  </div>
+  <div class="hero-scroll-hint">
+    <span class="scroll-line"></span>
+    Scroll
+  </div>
+</section>
 
-    <main>
-        <section class="s-home">
-            <article class="article-home">
-                <span class="span-home">Olá, meu nome é</span>
-                <h1>
-                    River <span>Diniz</span>
-                </h1>
-                <p><span>Especialista de suporte e Engenheiro de Dados</span></p>
+<div class="section-divider"></div>
 
-                <div class="botoes-home">
-                    <a class="link-contato" href="#contatos">Entre em contato</a>
-                    <a class="cv-download" href="assets/cvriversdiniz.pdf"
-                        download="Currículo River Diniz">CV Download</a>
-                </div>
-
-
-            </article>
-            <img class="img-home" src="assets/img/programador.svg" alt="" width="650" height="500">
-        </section>
-
-        <div>
-            <h2 class="titulo-sobre" id="sobre-mim">Sobre</h2>
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-header fade-up">
+    <div class="section-tag">Sobre mim</div>
+    <h2 class="section-title">Construindo dados<br>com propósito</h2>
+  </div>
+  <div class="about-grid">
+    <div class="about-text fade-up delay-1">
+      <!-- [SUBSTITUA com seu about/resumo do LinkedIn] -->
+      <p>
+        Sou engenheiro de dados com foco em arquitetar e implementar pipelines de dados eficientes, desde a ingestão até a entrega de insights confiáveis para tomada de decisão. Tenho experiência sólida com ambientes cloud e ferramentas modernas de orquestração e transformação de dados.
+      </p>
+      <p>
+        Trabalho na interseção entre engenharia de software e análise de dados, garantindo que as estruturas que construo sejam escaláveis, observáveis e alinhadas com as necessidades de negócio. Gosto de resolver problemas complexos com soluções simples e bem documentadas.
+      </p>
+      <p>
+        Além da parte técnica, valorizo comunicação clara com stakeholders e a tradução de requisitos de negócio em arquiteturas de dados sólidas.
+      </p>
+    </div>
+    <div class="about-skills fade-up delay-2">
+      <div class="skills-group">
+        <div class="skills-group-label">Linguagens</div>
+        <div class="skills-tags">
+          <!-- [SUBSTITUA com suas linguagens reais] -->
+          <span class="tag accent-tag">Python</span>
+          <span class="tag">SQL</span>
+          <span class="tag">Scala</span>
+          <span class="tag">Bash</span>
         </div>
+      </div>
+      <div class="skills-group">
+        <div class="skills-group-label">Engenharia de Dados</div>
+        <div class="skills-tags">
+          <span class="tag">Apache Spark</span>
+          <span class="tag">Apache Airflow</span>
+          <span class="tag">dbt</span>
+          <span class="tag">Kafka</span>
+          <span class="tag">Databricks</span>
+          <span class="tag">Flink</span>
+        </div>
+      </div>
+      <div class="skills-group">
+        <div class="skills-group-label">Cloud & Infraestrutura</div>
+        <div class="skills-tags">
+          <span class="tag">AWS</span>
+          <span class="tag">GCP</span>
+          <span class="tag">Docker</span>
+          <span class="tag">Kubernetes</span>
+          <span class="tag">Terraform</span>
+        </div>
+      </div>
+      <div class="skills-group">
+        <div class="skills-group-label">Banco de Dados & BI</div>
+        <div class="skills-tags">
+          <span class="tag">BigQuery</span>
+          <span class="tag">Redshift</span>
+          <span class="tag">PostgreSQL</span>
+          <span class="tag">Snowflake</span>
+          <span class="tag">Power BI</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-        <section class="sobre">
-            <img class="minha-foto" src="assets/img/minha-foto.png" height="400px" alt="">
+<div class="section-divider"></div>
 
-            <article class="sobre-mim">
-                <p>
-                <span>Em contrução...</span>.
-                </p>
-            </article>
-        </section>
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-header fade-up">
+    <div class="section-tag">Projetos</div>
+    <h2 class="section-title">Trabalho selecionado</h2>
+  </div>
+  <div class="projects-grid">
 
-        <!-- <section id="projetos" class="projetos">
-            <h2 class="titulo-projetos">Projetos</h2>
-            <div class="projects-cards">
-                <div class="cards">
-                    <img src="assets/img/batflix.png" width="311px" height="191px" alt="">
-                    <div class="project-info">
-                        <h4 class="titulo-card">Batflix Clone</h4>
-                        <p>Clone da Netflix feito com o objetivo de treinar as tecnologias abordadas no projeto.</p>
-                        <div class="projects-botoes">
-                            <a class="btn-view" href="https://batflixclone.netlify.app" target="_blank">Visualizer</a>
-                            <a class="btn-git" href="https://github.com/riversdiniz/netflix-clone"  target="_blank">GitHub Repo</a>
-                        </div>
-                    </div>
-                </div>
+    <!-- PROJETO 1 — [SUBSTITUA com seus dados do GitHub] -->
+    <article class="project-card fade-up delay-1" style="--lang-color: #3572A5; --lang-bg: rgba(53,114,165,0.1);">
+      <div class="project-glow"></div>
+      <div class="project-lang-icon">Py</div>
+      <h3 class="project-name">
+        <!-- [SUBSTITUA] Nome do Repositório 1 -->
+        Pipeline ETL Automatizado
+      </h3>
+      <p class="project-desc">
+        <!-- [SUBSTITUA com descrição baseada no README do repositório] -->
+        Pipeline de extração, transformação e carga de dados construído com Python e Airflow. Processa milhões de registros diariamente com monitoramento em tempo real e alertas automáticos de falha.
+      </p>
+      <div class="project-stack">
+        <span class="stack-tag">Python</span>
+        <span class="stack-tag">Apache Airflow</span>
+        <span class="stack-tag">PostgreSQL</span>
+        <span class="stack-tag">Docker</span>
+      </div>
+      <a href="https://github.com/riversdiniz/SEU-REPO-1" target="_blank" rel="noopener" class="project-link">
+        Ver no GitHub
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </article>
 
-                <div class="cards">
-                    <img src="assets/img/gerarsenha.png" width="311px" height="191px" alt="">
-                    <div class="project-info">
-                        <h4 class="titulo-card">Gerador de Senha</h4>
-                        <p>O gerador de senha é um site que permite a criação de uma senha aleatória.</p>
-                        <div class="projects-botoes">
-                            <a class="btn-view" href="https://gerandocodigo.netlify.app" target="_blank">Visualizer</a>
-                            <a class="btn-git" href="https://github.com/riversdiniz/geradorsenha" target="_blank">GitHub Repo</a>
-                        </div>
-                    </div>
-                </div>
+    <!-- PROJETO 2 — [SUBSTITUA com seus dados do GitHub] -->
+    <article class="project-card fade-up delay-2" style="--lang-color: #f7c948; --lang-bg: rgba(247,201,72,0.08);">
+      <div class="project-glow"></div>
+      <div class="project-lang-icon">Sp</div>
+      <h3 class="project-name">
+        <!-- [SUBSTITUA] Nome do Repositório 2 -->
+        Data Lakehouse com Spark
+      </h3>
+      <p class="project-desc">
+        <!-- [SUBSTITUA com descrição baseada no README do repositório] -->
+        Arquitetura de Data Lakehouse implementada com Apache Spark e Delta Lake. Oferece processamento batch e streaming com garantias de transações ACID e versionamento de dados.
+      </p>
+      <div class="project-stack">
+        <span class="stack-tag">Spark</span>
+        <span class="stack-tag">Delta Lake</span>
+        <span class="stack-tag">AWS S3</span>
+        <span class="stack-tag">Python</span>
+      </div>
+      <a href="https://github.com/riversdiniz/SEU-REPO-2" target="_blank" rel="noopener" class="project-link">
+        Ver no GitHub
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </article>
 
-                <div class="cards">
-                    <img src="assets/img/todoist.png" width="311px" height="191px" alt="">
-                    <div class="project-info">
-                        <h4 class="titulo-card">Todoist</h4>
-                        <p>Finalmente alcance o foco, a organização e a calma com o Todoist. O gerenciador lista de tarefas.</p>
-                        <div class="projects-botoes">
-                            <a class="btn-view" href="https://listadtarefas.netlify.app" target="_blank">Visualizer</a>
-                            <a class="btn-git" href="https://github.com/riversdiniz/listadetarefas" target="_blank">GitHub Repo</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <!-- PROJETO 3 — [SUBSTITUA com seus dados do GitHub] -->
+    <article class="project-card fade-up delay-3" style="--lang-color: #FF6B6B; --lang-bg: rgba(255,107,107,0.08);">
+      <div class="project-glow"></div>
+      <div class="project-lang-icon">dbt</div>
+      <h3 class="project-name">
+        <!-- [SUBSTITUA] Nome do Repositório 3 -->
+        Analytics Engineering com dbt
+      </h3>
+      <p class="project-desc">
+        <!-- [SUBSTITUA com descrição baseada no README do repositório] -->
+        Projeto de analytics engineering que centraliza transformações de dados usando dbt. Inclui testes automatizados, documentação gerada, e modelos dimensionais para análise de desempenho de vendas.
+      </p>
+      <div class="project-stack">
+        <span class="stack-tag">dbt</span>
+        <span class="stack-tag">BigQuery</span>
+        <span class="stack-tag">SQL</span>
+        <span class="stack-tag">Looker Studio</span>
+      </div>
+      <a href="https://github.com/riversdiniz/SEU-REPO-3" target="_blank" rel="noopener" class="project-link">
+        Ver no GitHub
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </article>
 
-        </section> -->
+  </div>
+</section>
 
-        <!-- <section id="conhecimentos" class="conhecimentos">
-            <h2>Conhecimentos</h2>
+<div class="section-divider"></div>
 
-            <article>
-                <div class="skills">
-                    <div class="skills-card">
-                        <img src="assets/icons/html-5.png" alt="HTML5">
-                        <p class="titulo-skill-card">HTML5</p>
-                        <hr>
-                        <p class="paragrafo-skills"> Estrutura de layouts, principais tags, HTML semântico, formulários etc.</p>
-                    </div>
-                    <div class="skills-card">
-                        <img src="assets/icons/css-3.png" alt="CSS3">
-                        <p class="titulo-skill-card">CSS3</p>
-                        <hr>
-                        <p class="paragrafo-skills"> Estilização de layout</p>
-                    </div>
-                    <div class="skills-card">
-                        <img src="assets/icons/js.png" alt="JavaScript">
-                        <P class="titulo-skill-card">JavaScript</P>
-                        <hr>
-                        <p class="paragrafo-skills">Manipulação do DOM, tipos de dados, funções, array, objetos, eventos</p>
-                    </div>
-                    <div class="skills-card">
-                        <img src="assets/icons/git.png" alt="Git" width="140px">
-                        <P class="titulo-skill-card">Git</P>
-                        <hr>
-                        <p class="paragrafo-skills">Trabalhando em equipe, Manipulando as versões e gerando entregas.</p>
-                    </div>
-                </div>
-            </article>
-        </section> -->
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="section-header fade-up">
+    <div class="section-tag">Experiência</div>
+    <h2 class="section-title">Trajetória profissional</h2>
+  </div>
+  <div class="timeline">
 
-        <section id="contatos" class="contato">
-            <article class="box-contato">
-                <h2>Contato</h2>
-                <div class="contacts-link">
-                    <a href="https://www.linkedin.com/in/riversdiniz/" target="_blank">
-                        <img src="assets/icons/linkedin-free-icon-font.png" alt="linkedin">
-                    </a>
-                    <a href="https://github.com/riversdiniz" target="_blank">
-                        <img src="assets/icons/github-free-icon-font.png" alt="GitHub">
-                    </a>
-                    <a href="mailto:river-s-diniz@gmail.com" target="_blank">
-                        <img src="assets/icons/envelope-free-icon-font.png" alt="email">
-                    </a>
-                    <a href="http://api.whatsapp.com/send?1=pt_BR&phone=5592988092246" target="_blank">
-                        <img src="assets/icons/whatsapp-free-icon-font.png"alt="whatsapp"><a>
-                </div>
-            
-            </article>
-            <form class="form" action="https://formsubmit.co/river-s-diniz@hotmail.com.com" method="POST">
-                <label>
-                    <input type="text" name="name" placeholder="Seu nome" required>
-                </label>
-                <label>
-                    <input type="email" name="email" placeholder="Seuemail@gmail.com" required>
-                </label>
-                <label>
-                    <textarea name="Mensagem" placeholder="Deixe sua mensagem"></textarea>
-                </label>
+    <!-- [SUBSTITUA com suas experiências do LinkedIn] -->
 
-                <button type="submit">Enviar</button>
-            </form>
-        </section>
-    </main>
-    <footer>
-        <p>Desenvolvido por <a href="https://www.linkedin.com/in/riversdiniz/" target="_blank">River Diniz</a></p>
-    </footer>
+    <div class="timeline-item fade-up delay-1">
+      <div class="timeline-dot"></div>
+      <div class="timeline-meta">
+        <span class="timeline-role">Engenheiro de Dados Sênior</span>
+        <span class="timeline-company">Empresa Atual</span>
+        <span class="timeline-period">Jan 2023 — Presente</span>
+      </div>
+      <div class="timeline-desc">
+        <p>Responsável pela arquitetura e manutenção dos pipelines de dados críticos da organização.</p>
+        <ul>
+          <li>Desenvolvimento de pipelines em Python e Spark processando +50M registros/dia</li>
+          <li>Migração do ambiente on-premise para arquitetura cloud-native na AWS</li>
+          <li>Implementação de camadas de qualidade de dados com Great Expectations</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="timeline-item fade-up delay-2">
+      <div class="timeline-dot"></div>
+      <div class="timeline-meta">
+        <span class="timeline-role">Engenheiro de Dados</span>
+        <span class="timeline-company">Empresa Anterior</span>
+        <span class="timeline-period">Mar 2021 — Dez 2022</span>
+      </div>
+      <div class="timeline-desc">
+        <p>Atuação no desenvolvimento e manutenção de infraestrutura de dados para produto SaaS B2B.</p>
+        <ul>
+          <li>Criação de Data Warehouse no BigQuery com modelagem dimensional</li>
+          <li>Orquestração de workflows com Apache Airflow</li>
+          <li>Desenvolvimento de dashboards analíticos com Looker e Power BI</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="timeline-item fade-up delay-3">
+      <div class="timeline-dot"></div>
+      <div class="timeline-meta">
+        <span class="timeline-role">Analista de Dados</span>
+        <span class="timeline-company">Empresa Anterior 2</span>
+        <span class="timeline-period">Jun 2019 — Fev 2021</span>
+      </div>
+      <div class="timeline-desc">
+        <p>Análise exploratória de dados, criação de relatórios e suporte às áreas de negócio com dados acionáveis.</p>
+        <ul>
+          <li>Extração e transformação de dados com Python e SQL</li>
+          <li>Automação de relatórios mensais economizando 20h/mês do time</li>
+          <li>Introdução de cultura data-driven na área de marketing</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-inner fade-up">
+    <h2 class="contact-tagline">Pronto para<br><span>colaborar</span>?</h2>
+    <p class="contact-text">
+      Estou aberto a oportunidades em engenharia de dados, projetos freelance ou conversas sobre tecnologia. Se você tem um desafio interessante, adoraria ouvir sobre ele.
+    </p>
+    <div class="contact-links">
+      <a href="https://www.linkedin.com/in/riversdiniz" target="_blank" rel="noopener" class="btn btn-primary">
+        <svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+        Conectar no LinkedIn
+      </a>
+      <a href="mailto:seu@email.com" class="btn btn-ghost">
+        <!-- [SUBSTITUA com seu email] -->
+        <svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        Enviar Email
+      </a>
+      <a href="https://github.com/riversdiniz" target="_blank" rel="noopener" class="btn btn-ghost">
+        <svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg>
+        GitHub
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">R<span>.</span>Diniz</div>
+  <p class="footer-copy">© 2025 Rivers Diniz — Manaus, AM</p>
+  <div class="footer-socials">
+    <a href="https://www.linkedin.com/in/riversdiniz" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="https://github.com/riversdiniz" target="_blank" rel="noopener">GitHub</a>
+  </div>
+</footer>
+
+<script>
+  // Navbar scroll effect
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 40);
+  }, { passive: true });
+
+  // Intersection Observer for fade-up animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+  // Hero elements animate immediately
+  document.querySelector('.hero-inner') && (() => {
+    const hero = document.querySelector('.hero-inner');
+    hero.style.opacity = '0';
+    hero.style.transform = 'translateY(20px)';
+    hero.style.transition = 'opacity 0.9s ease, transform 0.9s ease';
+    requestAnimationFrame(() => {
+      setTimeout(() => {
+        hero.style.opacity = '1';
+        hero.style.transform = 'translateY(0)';
+      }, 80);
+    });
+  })();
+
+  // Smooth scroll for anchor links
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+</script>
 </body>
-
 </html>
